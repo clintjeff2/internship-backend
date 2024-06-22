@@ -11,7 +11,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
     method: "POST PATCH GET DELETE",
-    origin: "http://localhost:5173",
+    origin: "https://internship-dusky.vercel.app",
+    // origin: "http://localhost:5173",
   })
 );
 

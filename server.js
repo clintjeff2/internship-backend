@@ -12,7 +12,9 @@ process.on("uncaughtException", (err) => {
 dotenv.config({ path: "./config.env" });
 const app = require("./app");
 
-const DB = "mongodb://127.0.0.1:27017/internship";
+// const DB = "mongodb://127.0.0.1:27017/internship";
+const DB =
+  "mongodb+srv://vanessafuangi:gO8QLhdUz6CWAQMA@internship.wh3lyvn.mongodb.net/?retryWrites=true&w=majority&appName=Internship";
 
 mongoose.connect(DB).then((con) => {
   console.log("DB connection successful");
