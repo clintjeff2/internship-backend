@@ -18,7 +18,6 @@ const DB =
 
 mongoose.connect(DB).then((con) => {
   console.log("DB connection successful");
-  console.log(con);
 });
 
 // Starting the server

@@ -30,7 +30,7 @@ const internSchema = new mongoose.Schema({
   },
   hub: {
     type: String,
-    enum: ["webDev", "devops1", "devops2", "react", "wLang"],
+    enum: ["webDev", "devops1", "devops2", "react", "wLang", "digitalTrans"],
     required: [true, "Please choose a hub for your internship"],
   },
   message: String,
