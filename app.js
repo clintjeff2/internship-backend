@@ -11,8 +11,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(
 // 	cors({
 // 		method: 'POST PATCH GET DELETE',
-// 		origin: 'https://internship-dusky.vercel.app/',
-// 		// origin: "http://localhost:5173",
+// 		// origin: 'https://internship-dusky.vercel.app/',
+// 		origin: 'http://localhost:5173',
 // 	})
 // );
 app.use(
@@ -20,6 +20,7 @@ app.use(
 		credentials: true,
 		methods: 'POST,GET,PATCH,DELETE',
 		origin: 'https://internship-dusky.vercel.app',
+		// origin: 'http://localhost:5173',
 		optionsSuccessStatus: 204,
 	})
 );

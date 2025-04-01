@@ -14,7 +14,7 @@ const app = require('./app');
 
 const DB =
 	'mongodb+srv://clintjeff2:kljlsljLKJKLDJOIj12lj)_@cluster0.aifxmvj.mongodb.net/internship?retryWrites=true&w=majority';
-
+// const DB = 'mongodb://localhost:27017/interns';
 mongoose.connect(DB).then((con) => {
 	console.log('DB connection successful');
 });
