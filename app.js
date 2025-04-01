@@ -8,11 +8,19 @@ const app = express();
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// app.use(
+// 	cors({
+// 		method: 'POST PATCH GET DELETE',
+// 		origin: 'https://internship-dusky.vercel.app/',
+// 		// origin: "http://localhost:5173",
+// 	})
+// );
 app.use(
 	cors({
-		method: 'POST PATCH GET DELETE',
-		origin: 'https://internship-dusky.vercel.app/',
-		// origin: "http://localhost:5173",
+		credentials: true,
+		methods: 'POST,GET,PATCH,DELETE',
+		origin: 'https://internship-dusky.vercel.app',
+		optionsSuccessStatus: 204,
 	})
 );
 
