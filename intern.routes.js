@@ -16,4 +16,6 @@ router
 
 router.get('/excel/file', internController.getExcelFile);
 
+router.post('/user/email', internController.sendEmail);
+
 module.exports = router;

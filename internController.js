@@ -3,6 +3,11 @@ const AppError = require('./utils/appError');
 const APIFeatures = require('./utils/apiFeatures');
 const Intern = require('./internModel');
 const Exceljs = require('exceljs');
+const {
+	transporter,
+	createWelcomeEmailText,
+	createWelcomeEmailHTML,
+} = require('./utils/sendEmail');
 
 exports.registerIntern = catchAsync(async (req, res, next) => {
 	const newIntern = await Intern.create(req.body);
@@ -136,5 +141,79 @@ exports.getExcelFile = async (req, res) => {
 			message: 'Error occurred while generating Excel file',
 			error: err.message,
 		});
+	}
+};
+
+exports.sendManyEmails = async (req, res) => {
+	try {
+		const { users } = req.body;
+
+		// Validate request
+		if (!users || !Array.isArray(users) || users.length === 0) {
+			return res.status(400).json({
+				error:
+					'Please provide an array of user objects with email and name properties',
+			});
+		}
+
+		// Track successful and failed email sends
+		const results = {
+			success: [],
+			failed: [],
+		};
+
+		// Send emails to each user
+		for (const user of users) {
+			if (!user.email) {
+				results.failed.push({ user, error: 'Missing email address' });
+				continue;
+			}
+
+			try {
+				await transporter.sendMail({
+					from: `"${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM_ADDRESS}>`,
+					to: user.email,
+					subject: 'Welcome to Our Platform!',
+					text: createWelcomeEmailText(user.name),
+					html: createWelcomeEmailHTML(user.name),
+				});
+
+				results.success.push(user);
+			} catch (error) {
+				console.error(`Failed to send email to ${user.email}:`, error);
+				results.failed.push({ user, error: error.message });
+			}
+		}
+
+		return res.json({
+			message: `Successfully sent ${results.success.length} emails, ${results.failed.length} failed`,
+			results,
+		});
+	} catch (error) {
+		console.error('Error sending welcome emails:', error);
+		return res.status(500).json({ error: 'Failed to send welcome emails' });
+	}
+};
+
+exports.sendEmail = async (req, res) => {
+	try {
+		const { email, name } = req.body;
+
+		if (!email) {
+			return res.status(400).json({ error: 'Please provide an email address' });
+		}
+
+		await transporter.sendMail({
+			from: `"${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM_ADDRESS}>`,
+			to: email,
+			subject: 'Welcome to Our Platform!',
+			text: createWelcomeEmailText(name, 'General'),
+			html: createWelcomeEmailHTML(name, 'General'),
+		});
+
+		return res.json({ message: 'Test welcome email sent successfully' });
+	} catch (error) {
+		console.error('Error sending test welcome email:', error);
+		return res.status(500).json({ error: 'Failed to send test welcome email' });
 	}
 };
